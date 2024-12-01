@@ -24,6 +24,7 @@ class PendudukResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-m-user-group';
 
     protected static ?string $navigationLabel = 'Penduduk';
+    protected static ?string $pluralLabel = 'Data penduduk';
 
     public static function form(Form $form): Form
     {
