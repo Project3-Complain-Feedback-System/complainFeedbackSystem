@@ -10,8 +10,12 @@ use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
@@ -48,11 +52,28 @@ class FeedbackResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('penduduk.nama')->searchable(),
+                TextColumn::make('penduduk.nama')
+                    ->description(function (Feedback $record) {
+                        return $record->penduduk->nik;
+                    })
+                    ->searchable()
+                    ->label('Nama penduduk'),
                 TextColumn::make('kategori.nama'),
-                TextColumn::make('rating'),
+                TextColumn::make('rating')->formatStateUsing(function (string $state): string {
+                    if ($state == 1) {
+                        return '⭐️';
+                    } elseif ($state == 2) {
+                        return '⭐️⭐️';
+                    } elseif ($state == 3) {
+                        return '⭐️⭐️⭐️';
+                    } elseif ($state == 4) {
+                        return '⭐️⭐️⭐️⭐️';
+                    } else {
+                        return '⭐️⭐️⭐️⭐️⭐️';
+                    }
+                })->sortable(),
                 TextColumn::make('komentar')->searchable(),
-                TextColumn::make('gambar'),
+                ImageColumn::make('gambar'),
             ])
             ->filters([
                 Filter::make('Tipe')
@@ -104,6 +125,30 @@ class FeedbackResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                ImageEntry::make('gambar')->size(400)->width(840)->maxWidth('full')->columnSpanFull(),
+                TextEntry::make('penduduk.nama')->label('Nama penduduk'),
+                TextEntry::make('kategori.nama'),
+                TextEntry::make('rating')->formatStateUsing(function (string $state): string {
+                    if ($state == 1) {
+                        return '⭐️';
+                    } elseif ($state == 2) {
+                        return '⭐️⭐️';
+                    } elseif ($state == 3) {
+                        return '⭐️⭐️⭐️';
+                    } elseif ($state == 4) {
+                        return '⭐️⭐️⭐️⭐️';
+                    } else {
+                        return '⭐️⭐️⭐️⭐️⭐️';
+                    }
+                }),
+                TextEntry::make('komentar'),
             ]);
     }
 
