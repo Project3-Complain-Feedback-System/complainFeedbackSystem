@@ -23,4 +23,4 @@ Route::get('/validate-token', function (Request $request) {
 
 Route::post('logout', LogoutController::class)->middleware('auth:sanctum');
 
-Route::post('login', \App\Http\Controllers\LoginController::class)->name('login');
+Route::post('login', \App\Http\Controllers\LoginController::class);
