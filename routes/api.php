@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\LogoutController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,3 +25,5 @@ Route::get('/validate-token', function (Request $request) {
 Route::post('logout', LogoutController::class)->middleware('auth:sanctum');
 
 Route::post('login', \App\Http\Controllers\LoginController::class);
+
+Route::post('feedback', [FeedbackController::class, 'store'])->middleware('auth:sanctum');
