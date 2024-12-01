@@ -21,7 +21,7 @@ class PendudukResource extends Resource
 {
     protected static ?string $model = Penduduk::class;
 
-    protected static ?string $navigationIcon = 'heroicon-s-user';
+    protected static ?string $navigationIcon = 'heroicon-m-user-group';
 
     protected static ?string $navigationLabel = 'Penduduk';
 
