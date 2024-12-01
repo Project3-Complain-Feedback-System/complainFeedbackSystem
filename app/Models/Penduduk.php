@@ -25,4 +25,9 @@ class Penduduk extends Model
         'nama_ayah',
         'nama_ibu'
     ];
+
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
 }
