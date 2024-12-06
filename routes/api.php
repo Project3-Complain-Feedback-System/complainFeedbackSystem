@@ -27,3 +27,5 @@ Route::post('logout', LogoutController::class)->middleware('auth:sanctum');
 Route::post('login', \App\Http\Controllers\LoginController::class);
 
 Route::post('feedback', [FeedbackController::class, 'store'])->middleware('auth:sanctum');
+
+Route::get('categories', [\App\Http\Controllers\KategoriController::class, 'index'])->middleware('auth:sanctum');
