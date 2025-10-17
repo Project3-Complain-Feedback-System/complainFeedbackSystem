@@ -37,56 +37,10 @@ class PendudukResource extends Resource
                 TextInput::make('nama')
                     ->required()
                     ->maxLength(255),
-                TextInput::make('tempat_lahir')
+                TextInput::make('tanggal_lahir')
                     ->required()
                     ->maxLength(255),
-                TextInput::make('alamat')
-                    ->required()
-                    ->maxLength(255),
-                DatePicker::make('tanggal_lahir')
-                    ->required(),
-                Select::make('jenis_kelamin')
-                    ->options([
-                        'male' => 'Laki - Laki',
-                        'female' => 'Perempuan',
-                    ]),
-                TextInput::make('agama')
-                    ->required()
-                    ->maxLength(255),
-                Select::make('pendidikan')
-                    ->options([
-                        'SD' => 'SD',
-                        'SMP' => 'SMP',
-                        'SMA' => 'SMA',
-                        'S1' => 'S1',
-                        'S2' => 'S2',
-                        'S3' => 'S3',
-                    ])
-                    ->required(),
-                TextInput::make('pekerjaan')
-                    ->required()
-                    ->maxLength(255),
-                Select::make('status_perkawinan')
-                    ->options([
-                        'kawin' => 'Kawin',
-                        'belum' => 'Belum Kawin',
-                    ]),
-                Select::make('status_dalam_keluarga')
-                    ->options([
-                        'kepala_keluarga' => 'Kepala Keluarga',
-                        'istri' => 'Istri',
-                        'anak' => 'Anak',
-                    ]),
-                TextInput::make('kewarganegaraan')
-                    ->required()
-                    ->default('Indonesia')
-                    ->maxLength(255),
-                TextInput::make('nama_ayah')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('nama_ibu')
-                    ->required()
-                    ->maxLength(255),
+
             ]);
     }
 
@@ -98,33 +52,9 @@ class PendudukResource extends Resource
                     ->searchable(),
                 TextColumn::make('nama')
                     ->searchable(),
-                TextColumn::make('tempat_lahir')
-                    ->searchable(),
                 TextColumn::make('tanggal_lahir')
-                    ->date()
-                    ->sortable(),
-                TextColumn::make('alamat')
-                    ->sortable(),
-                TextColumn::make('jenis_kelamin')
-                    ->formatStateUsing(fn(string $state): string => $state == 'male' ? 'Laki - Laki' : 'Perempuan')
                     ->searchable(),
-                TextColumn::make('agama')
-                    ->searchable(),
-                TextColumn::make('pendidikan')
-                    ->searchable(),
-                TextColumn::make('pekerjaan')
-                    ->searchable(),
-                TextColumn::make('status_perkawinan')
-                    ->formatStateUsing(fn(string $state): string => $state == 'kawin' ? 'Kawin' : 'Belum Kawin')
-                    ->searchable(),
-                TextColumn::make('status_dalam_keluarga')
-                    ->searchable(),
-                TextColumn::make('kewarganegaraan')
-                    ->searchable(),
-                TextColumn::make('nama_ayah')
-                    ->searchable(),
-                TextColumn::make('nama_ibu')
-                    ->searchable(),
+
             ])
             ->filters([
                 //

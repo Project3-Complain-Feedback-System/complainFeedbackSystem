@@ -52,12 +52,6 @@ class FeedbackResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('penduduk.nama')
-                    ->description(function (Feedback $record) {
-                        return $record->penduduk->nik;
-                    })
-                    ->searchable()
-                    ->label('Nama penduduk'),
                 TextColumn::make('kategori.nama'),
                 TextColumn::make('rating')->formatStateUsing(function (string $state): string {
                     if ($state == 1) {
