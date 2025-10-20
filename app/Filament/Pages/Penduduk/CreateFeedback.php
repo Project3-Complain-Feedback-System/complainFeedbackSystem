@@ -71,9 +71,12 @@ class CreateFeedback extends Page implements HasForms
 
     public function submit(): void
     {
+        $data=$this->form->getState();
+        $validatedData=$this->form->getState();
+
         $user = auth('penduduk')->user();
 
-        $gambar = $this->data['gambar'] ?? null;
+        $gambar = $validatedData['gambar'] ?? null;
 
         if (is_array($gambar)) {
             $gambar = reset($gambar); // ambil file pertama dari array
@@ -85,9 +88,9 @@ class CreateFeedback extends Page implements HasForms
 
         Feedback::create([
             'penduduk_id' => $user->id,
-            'kategori_id' => $this->data['kategori_id'],
-            'rating' => $this->data['rating'],
-            'komentar' => $this->data['komentar'],
+            'kategori_id' => $validatedData['kategori_id'],
+            'rating' => $validatedData['rating'],
+            'komentar' => $validatedData['komentar'],
             'gambar' => $gambar,
         ]);
 

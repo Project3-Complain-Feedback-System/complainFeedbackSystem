@@ -32,6 +32,7 @@ class PendudukResource extends Resource
                     ->maxLength(16),
                 TextInput::make('name')
                     ->required()
+                    ->label('Nama')
                     ->maxLength(255),
                 DatePicker::make('tanggal_lahir')
                     ->required(),
