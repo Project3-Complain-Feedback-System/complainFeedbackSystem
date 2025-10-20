@@ -3,19 +3,14 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PendudukResource\Pages;
-use App\Filament\Resources\PendudukResource\RelationManagers;
 use App\Models\Penduduk;
-use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PendudukResource extends Resource
 {
@@ -24,6 +19,7 @@ class PendudukResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-m-user-group';
 
     protected static ?string $navigationLabel = 'Penduduk';
+
     protected static ?string $pluralLabel = 'Data penduduk';
 
     public static function form(Form $form): Form
@@ -34,13 +30,11 @@ class PendudukResource extends Resource
                     ->required()
                     ->numeric()
                     ->maxLength(16),
-                TextInput::make('nama')
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                TextInput::make('tanggal_lahir')
-                    ->required()
-                    ->maxLength(255),
-
+                DatePicker::make('tanggal_lahir')
+                    ->required(),
             ]);
     }
 
@@ -50,7 +44,7 @@ class PendudukResource extends Resource
             ->columns([
                 TextColumn::make('nik')
                     ->searchable(),
-                TextColumn::make('nama')
+                TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('tanggal_lahir')
                     ->searchable(),

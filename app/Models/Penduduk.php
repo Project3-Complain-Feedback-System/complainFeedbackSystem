@@ -2,16 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Penduduk extends Model
+class Penduduk extends Authenticatable implements FilamentUser
 {
     use HasApiTokens;
 
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        return $panel->getId() === 'penduduk';
+    }
+
     protected $fillable = [
         'nik',
-        'nama',
+        'name',
         'tempat_lahir',
         'tanggal_lahir',
         'jenis_kelamin',
@@ -23,7 +29,7 @@ class Penduduk extends Model
         'status_dalam_keluarga',
         'pendidikan',
         'nama_ayah',
-        'nama_ibu'
+        'nama_ibu',
     ];
 
     public function feedbacks()

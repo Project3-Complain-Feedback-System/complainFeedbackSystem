@@ -3,11 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\FeedbackResource\Pages;
-use App\Filament\Resources\FeedbackResource\RelationManagers;
 use App\Models\Feedback;
-use App\Models\Kategori;
-use Filament\Forms;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\ImageEntry;
@@ -23,7 +19,6 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class FeedbackResource extends Resource
 {
@@ -43,6 +38,7 @@ class FeedbackResource extends Resource
     {
         return false;
     }
+
     public static function canEdit(Model $record): bool
     {
         return false;
@@ -88,6 +84,7 @@ class FeedbackResource extends Resource
                         if ($data['tipe_respon'] === 'netral') {
                             return $query->where('rating', '=', 3);
                         }
+
                         return $query;
                     }),
                 SelectFilter::make('kategori_id')
@@ -110,14 +107,13 @@ class FeedbackResource extends Resource
                     ])
                     ->label('Rating'),
 
-
             ], layout: FiltersLayout::AboveContent)->filtersFormColumns(2)
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-//                    Tables\Actions\DeleteBulkAction::make(),
+                    //                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -126,8 +122,7 @@ class FeedbackResource extends Resource
     {
         return $infolist
             ->schema([
-                ImageEntry::make('gambar')->size(400)->width(840)->maxWidth('full')->columnSpanFull(),
-                TextEntry::make('penduduk.nama')->label('Nama penduduk'),
+                ImageEntry::make('gambar')->size(400)->width(840)->maxWidth('full')->columnSpanFull()->hidden(fn ($record) => blank($record->gambar)),
                 TextEntry::make('kategori.nama'),
                 TextEntry::make('rating')->formatStateUsing(function (string $state): string {
                     if ($state == 1) {

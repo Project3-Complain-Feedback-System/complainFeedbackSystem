@@ -3,34 +3,32 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\FeedbackDesaResource\Pages;
-use App\Filament\Resources\FeedbackDesaResource\RelationManagers;
 use App\Models\FeedbackDesa;
-use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class FeedbackDesaResource extends Resource
 {
     protected static ?string $model = FeedbackDesa::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-c-chat-bubble-left-ellipsis';
+
+    protected static ?string $navigationLabel = 'Feedback Desa';
+
+    protected static ?string $pluralLabel = 'Daftar Feedback Desa';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Textarea::make("keterangan"),
-                FileUpload::make("gambar"),
+                Textarea::make('keterangan'),
+                FileUpload::make('gambar'),
             ]);
     }
 
@@ -38,7 +36,7 @@ class FeedbackDesaResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make("keterangan"),
+                TextColumn::make('keterangan'),
                 ImageColumn::make('gambar'),
             ])
             ->filters([
@@ -47,7 +45,7 @@ class FeedbackDesaResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ViewAction::make()
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
