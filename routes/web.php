@@ -1,10 +1,11 @@
 <?php
 
+use App\Models\FeedbackDesa;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect('/admin');
-    // return view('welcome');
+    $feedback = FeedbackDesa::all();
+    return view('welcome', ['feedback' => $feedback]);
 });
 
 // Route::get('/', function () {
