@@ -4,7 +4,7 @@ use App\Models\FeedbackDesa;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $feedback = FeedbackDesa::all();
+    $feedback = FeedbackDesa::latest()->get();
     return view('welcome', ['feedback' => $feedback]);
 });
 
