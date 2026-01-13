@@ -1,147 +1,283 @@
-<style>
-    body {
-        background: #f0f2f5;
-        font-family: Arial, sans-serif;
-    }
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Complaint & Feedback System Desa Bitungsari</title>
 
-    .container {
-        max-width: 600px;
-        margin: 40px auto;
-    }
+    <style>
+        /* ================= GLOBAL ================= */
+        * {
+            box-sizing: border-box;
+        }
 
-    .card {
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        padding: 16px;
-        margin-bottom: 20px;
-    }
+        body {
+            margin: 0;
+            background: #f0f2f5;
+            font-family: Arial, sans-serif;
+            padding-top: 80px;
+        }
 
-    .post-form textarea {
-        width: 100%;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        resize: none;
-        padding: 10px;
-        font-size: 14px;
-    }
+        a {
+            text-decoration: none;
+        }
 
-    .post-form input[type="file"] {
-        margin-top: 8px;
-        font-size: 13px;
-    }
+        /* ================= HEADER ================= */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 12px 40px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
 
-    .post-form button {
-        background: #1877f2;
-        border: none;
-        color: white;
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-        float: right;
-        margin-top: 10px;
-    }
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .post-form button:hover {
-        background: #166fe5;
-    }
+        .top-header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+        }
 
-    .post {
-        display: flex;
-        flex-direction: column;
-    }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
 
-    .post-header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-    }
+        .btn-group a {
+            background: #d6812a;
+            padding: 6px 14px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
 
-    .avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: #1877f2;
-        color: white;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 10px;
-        font-size: 16px;
-    }
+        .btn-group a:hover {
+            background: #c06e1f;
+        }
 
-    .post-info {
-        display: flex;
-        flex-direction: column;
-    }
+        /* ================= HERO ================= */
+        .hero {
+            background: linear-gradient(135deg, #1877f2, #0f5ec7);
+            padding: 80px 20px;
+            color: white;
+        }
 
-    .post-author {
-        font-weight: bold;
-        font-size: 14px;
-    }
+        .hero-content {
+            max-width: 1000px;
+            margin: auto;
+            text-align: center;
+        }
 
-    .post-time {
-        font-size: 12px;
-        color: gray;
-    }
+        .hero h2 {
+            font-size: 38px;
+            margin-bottom: 16px;
+        }
 
-    .post-text {
-        font-size: 15px;
-        margin-bottom: 10px;
-        line-height: 1.5;
-    }
+        .hero p {
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
 
-    .post img {
-        width: 100%;
-        border-radius: 8px;
-        margin-top: 8px;
-        object-fit: cover;
-    }
+        .hero-buttons {
+            margin-top: 24px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
 
-    .post-actions {
-        display: flex;
-        justify-content: space-around;
-        border-top: 1px solid #ddd;
-        padding-top: 8px;
-        margin-top: 10px;
-        color: #65676b;
-        font-size: 14px;
-    }
+        .btn-primary {
+            background: #d6812a;
+            color: white;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
 
-    .post-actions button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: #65676b;
-        font-weight: bold;
-    }
+        .btn-secondary {
+            background: white;
+            color: #1877f2;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
 
-    .post-actions button:hover {
-        color: #1877f2;
-    }
-</style>
+        /* ================= INFO ================= */
+        .info {
+            background: white;
+            padding: 60px 20px;
+        }
 
-<div class="container">
-    {{-- Form feedback --}}
-    {{--<div class="card post-form">
-        <form method="POST" enctype="multipart/form-data">
-            @csrf
-            <textarea name="keterangan" rows="3" placeholder="Tulis feedback kamu..."></textarea>
-            <input type="file" name="gambar" accept="image/*">
-            <button type="submit">Kirim</button>
-        </form>
-        <div style="clear: both;"></div>
-    </div>--}}
+        .info-container {
+            max-width: 1000px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
 
-    {{-- List feedback --}}
+        .info-card {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+
+        .info-card h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .info-card p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* ================= FEEDBACK ================= */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 16px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title h3 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1877f2;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+
+        .post-author {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .post-time {
+            font-size: 12px;
+            color: gray;
+        }
+
+        .post-text {
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            white-space: pre-line;
+        }
+
+        .post img {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            background: #1f2937;
+            color: #ccc;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+{{-- ================= HEADER ================= --}}
+<div class="top-header">
+    <h1>Desa Bitungsari</h1>
+    <div class="btn-group">
+        <a href="/admin/login">Login Admin</a>
+        <a href="/penduduk/login">Login Penduduk</a>
+    </div>
+</div>
+
+{{-- ================= HERO ================= --}}
+<div class="hero">
+    <div class="hero-content">
+        <h2>Complaint & Feedback System<br>Desa Bitungsari</h2>
+        <p>
+            Media resmi masyarakat Desa Bitungsari untuk menyampaikan
+            pengaduan, saran, dan masukan demi pelayanan desa yang transparan
+            dan berkelanjutan.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="/penduduk/login" class="btn-primary">Laporkan Pengaduan</a>
+            <a href="#feedback" class="btn-secondary">Lihat Feedback</a>
+        </div>
+    </div>
+</div>
+
+{{-- ================= INFO ================= --}}
+<div class="info">
+    <div class="info-container">
+        <div class="info-card">
+            <h3>Transparan</h3>
+            <p>Setiap pengaduan tercatat dan dapat dipantau secara terbuka.</p>
+        </div>
+        <div class="info-card">
+            <h3>Partisipatif</h3>
+            <p>Masyarakat terlibat aktif dalam pembangunan desa.</p>
+        </div>
+        <div class="info-card">
+            <h3>Responsif</h3>
+            <p>Perangkat desa merespon pengaduan dengan cepat dan tepat.</p>
+        </div>
+    </div>
+</div>
+
+{{-- ================= FEEDBACK ================= --}}
+<div class="container" id="feedback">
+    <div class="section-title">
+        <h3>Feedback & Informasi Desa</h3>
+    </div>
+
     @foreach ($feedback as $item)
         <div class="card post">
             <div class="post-header">
                 <div class="avatar">A</div>
-                <div class="post-info">
-                    <div class="post-author">Admin</div>
+                <div>
+                    <div class="post-author">Admin Desa</div>
                     <div class="post-time">{{ $item->created_at->diffForHumans() }}</div>
                 </div>
             </div>
@@ -149,13 +285,16 @@
             <div class="post-text">{{ $item->keterangan }}</div>
 
             @if ($item->gambar)
-                <img src="{{ asset('storage/' . $item->gambar) }}" alt="Gambar feedback">
+                <img src="{{ asset('storage/' . $item->gambar) }}" alt="Gambar Feedback">
             @endif
-
-            <div class="post-actions">
-                <button>👍 Like</button>
-                <button>💬 Comment</button>
-            </div>
         </div>
     @endforeach
 </div>
+
+{{-- ================= FOOTER ================= --}}
+<footer>
+    © {{ date('Y') }} Desa Bitungsari · Complaint & Feedback System
+</footer>
+
+</body>
+</html>
