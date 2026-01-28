@@ -36,8 +36,11 @@ class FeedbackDesaResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('keterangan'),
-                ImageColumn::make('gambar'),
+                TextColumn::make('keterangan')
+                ->searchable(),
+                ImageColumn::make('gambar')
+                ->searchable()
+                ->sortable(),
             ])
             ->filters([
                 //
