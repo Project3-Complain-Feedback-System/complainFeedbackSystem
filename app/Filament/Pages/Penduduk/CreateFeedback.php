@@ -71,34 +71,67 @@ class CreateFeedback extends Page implements HasForms
 
     public function submit(): void
     {
-        $data=$this->form->getState();
-        $validatedData=$this->form->getState();
+    $data = $this->form->getState();
+    $validatedData = $this->form->getState();
 
-        $user = auth('penduduk')->user();
+    $user = auth('penduduk')->user();
 
-        $gambar = $validatedData['gambar'] ?? null;
+    // Rate Limit
+    $hourKey = 'feedback-hour-' . $user->id;
+    $dayKey  = 'feedback-day-' . $user->id;
 
-        if (is_array($gambar)) {
-            $gambar = reset($gambar); // ambil file pertama dari array
-        }
-
-        if ($gambar instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
-            $gambar = $gambar->store('feedback', 'public');
-        }
-
-        Feedback::create([
-            'penduduk_id' => $user->id,
-            'kategori_id' => $validatedData['kategori_id'],
-            'rating' => $validatedData['rating'],
-            'komentar' => $validatedData['komentar'],
-            'gambar' => $gambar,
-        ]);
-
+    // Max 3 feedback per JAM
+    if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($hourKey, 3)) {
         Notification::make()
-            ->title('Feedback berhasil dikirim!')
-            ->success()
+            ->title('Terlalu sering mengirim feedback')
+            ->body('Maksimal 3 feedback dalam 1 jam.')
+            ->danger()
             ->send();
-
-        $this->form->fill(); // reset form
+        return;
     }
+
+    //Max 10 feedback per HARI
+    if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($dayKey, 10)) {
+        Notification::make()
+            ->title('Batas harian tercapai')
+            ->body('Maksimal 10 feedback per hari.')
+            ->danger()
+            ->send();
+        return;
+    }
+
+    \Illuminate\Support\Facades\RateLimiter::hit($hourKey, 3600);
+    \Illuminate\Support\Facades\RateLimiter::hit($dayKey, 86400);
+
+    //Delay buatan (anti bot)
+    sleep(2);
+
+    //Simpan Data
+    $gambar = $validatedData['gambar'] ?? null;
+
+    if (is_array($gambar)) {
+        $gambar = reset($gambar);
+    }
+
+    if ($gambar instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
+        $gambar = $gambar->store('feedback', 'public');
+    }
+
+    Feedback::create([
+        'penduduk_id' => $user->id,
+        'kategori_id' => $validatedData['kategori_id'],
+        'rating'      => $validatedData['rating'],
+        'komentar'    => $validatedData['komentar'],
+        'gambar'      => $gambar,
+        'status'      => 'pending',
+    ]);
+
+    Notification::make()
+        ->title('Feedback berhasil dikirim!')
+        ->success()
+        ->send();
+
+    $this->form->fill();
+    }
+
 }
