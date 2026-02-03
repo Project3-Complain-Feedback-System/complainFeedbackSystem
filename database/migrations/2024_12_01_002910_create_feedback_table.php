@@ -18,6 +18,12 @@ return new class extends Migration
             $table->integer('rating');
             $table->text('komentar');
             $table->string('gambar')->nullable();
+
+            // ✅ STATUS COMPLAINT
+            $table->string('status')->default('pending');
+            // pending = Belum Selesai
+            // done    = Selesai
+
             $table->timestamps();
         });
     }

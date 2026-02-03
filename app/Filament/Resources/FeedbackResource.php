@@ -28,10 +28,9 @@ class FeedbackResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                //
-            ]);
+        return $form->schema([
+            //
+        ]);
     }
 
     public static function canCreate(): bool
@@ -48,30 +47,53 @@ class FeedbackResource extends Resource
     {
         return $table
             ->columns([
+
                 TextColumn::make('kategori.nama'),
-                TextColumn::make('rating')->formatStateUsing(function (string $state): string {
-                    if ($state == 1) {
-                        return '⭐️';
-                    } elseif ($state == 2) {
-                        return '⭐️⭐️';
-                    } elseif ($state == 3) {
-                        return '⭐️⭐️⭐️';
-                    } elseif ($state == 4) {
-                        return '⭐️⭐️⭐️⭐️';
-                    } else {
-                        return '⭐️⭐️⭐️⭐️⭐️';
-                    }
-                })->sortable(),
+
+                TextColumn::make('rating')
+                    ->formatStateUsing(function (string $state): string {
+                        if ($state == 1) {
+                            return '⭐️';
+                        } elseif ($state == 2) {
+                            return '⭐️⭐️';
+                        } elseif ($state == 3) {
+                            return '⭐️⭐️⭐️';
+                        } elseif ($state == 4) {
+                            return '⭐️⭐️⭐️⭐️';
+                        } else {
+                            return '⭐️⭐️⭐️⭐️⭐️';
+                        }
+                    })
+                    ->sortable(),
+
                 TextColumn::make('komentar')->searchable(),
+
                 ImageColumn::make('gambar'),
+
+                // ✅ KOLOM STATUS (PALING KANAN)
+                TextColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->alignEnd()
+                    ->color(fn ($state) =>
+                        $state === 'pending' ? 'warning' : 'success'
+                    )
+                    ->formatStateUsing(fn ($state) =>
+                        $state === 'pending'
+                            ? 'Belum Selesai'
+                            : 'Selesai'
+                    )
+                    ->sortable(),
+
             ])
             ->filters([
+
                 Filter::make('Tipe')
                     ->form([
                         Select::make('tipe_respon')->options([
                             'positif' => 'Umpan balik',
                             'negatif' => 'Kritik / Komplain',
-                            'netral' => 'Netral',
+                            'netral'  => 'Netral',
                         ]),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
@@ -87,16 +109,20 @@ class FeedbackResource extends Resource
 
                         return $query;
                     }),
+
                 SelectFilter::make('kategori_id')
                     ->relationship('kategori', 'nama')
                     ->label('Kategori'),
-                SelectFilter::make('penduduk_id')
+
+                /*SelectFilter::make('penduduk_id')
                     ->relationship('penduduk', 'nama')
                     ->searchable()
-                    ->label('Penduduk'),
-                SelectFilter::make('nik')
+                    ->label('Penduduk'), */
+
+                /*SelectFilter::make('nik')
                     ->relationship('penduduk', 'nik')
-                    ->searchable(),
+                    ->searchable(),*/
+
                 SelectFilter::make('rating')
                     ->options([
                         '1' => '1',
@@ -106,25 +132,64 @@ class FeedbackResource extends Resource
                         '5' => '5',
                     ])
                     ->label('Rating'),
+                    //FILTER STATUS (TAMBAHAN SAJA)
+                    SelectFilter::make('status')
+                        ->label('Status')
+                        ->options([
+                            'pending' => 'Belum Selesai',
+                            'done'    => 'Selesai',
+                        ]),
 
-            ], layout: FiltersLayout::AboveContent)->filtersFormColumns(2)
+
+
+            ],layout: FiltersLayout::AboveContent)
+            ->filtersFormColumns(2)
             ->actions([
+
                 Tables\Actions\ViewAction::make(),
+
+                //ACTION UBAH STATUS (HANYA STATUS)
+                Tables\Actions\Action::make('ubahStatus')
+                    ->label('Ubah Status')
+                    ->icon('heroicon-o-check-circle')
+                    ->form([
+                        Select::make('status')
+                            ->label('Status')
+                            ->options([
+                                'pending' => 'Belum Selesai',
+                                'done'    => 'Selesai',
+                            ])
+                            ->required(),
+                    ])
+                    ->action(function (Feedback $record, array $data) {
+                        $record->update([
+                            'status' => $data['status'],
+                        ]);
+                    }),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    //                    Tables\Actions\DeleteBulkAction::make(),
+                    //
                 ]),
             ]);
     }
 
     public static function infolist(Infolist $infolist): Infolist
     {
-        return $infolist
-            ->schema([
-                ImageEntry::make('gambar')->size(400)->width(840)->maxWidth('full')->columnSpanFull()->hidden(fn ($record) => blank($record->gambar)),
-                TextEntry::make('kategori.nama'),
-                TextEntry::make('rating')->formatStateUsing(function (string $state): string {
+        return $infolist->schema([
+
+            ImageEntry::make('gambar')
+                ->size(400)
+                ->width(840)
+                ->maxWidth('full')
+                ->columnSpanFull()
+                ->hidden(fn ($record) => blank($record->gambar)),
+
+            TextEntry::make('kategori.nama'),
+
+            TextEntry::make('rating')
+                ->formatStateUsing(function (string $state): string {
                     if ($state == 1) {
                         return '⭐️';
                     } elseif ($state == 2) {
@@ -137,8 +202,23 @@ class FeedbackResource extends Resource
                         return '⭐️⭐️⭐️⭐️⭐️';
                     }
                 }),
-                TextEntry::make('komentar'),
-            ]);
+
+            TextEntry::make('komentar'),
+
+            // ✅ STATUS DI DETAIL VIEW
+            TextEntry::make('status')
+                ->label('Status')
+                ->badge()
+                ->color(fn ($state) =>
+                    $state === 'pending' ? 'warning' : 'success'
+                )
+                ->formatStateUsing(fn ($state) =>
+                    $state === 'pending'
+                        ? 'Belum Selesai'
+                        : 'Selesai'
+                ),
+
+        ]);
     }
 
     public static function getRelations(): array
@@ -151,9 +231,9 @@ class FeedbackResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListFeedback::route('/'),
+            'index'  => Pages\ListFeedback::route('/'),
             'create' => Pages\CreateFeedback::route('/create'),
-            'edit' => Pages\EditFeedback::route('/{record}/edit'),
+            'edit'   => Pages\EditFeedback::route('/{record}/edit'),
         ];
     }
 }
