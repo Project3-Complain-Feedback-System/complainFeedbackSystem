@@ -46,6 +46,7 @@
         .btn-group {
             display: flex;
             gap: 10px;
+            align-items: center;
         }
 
         .btn-group a {
@@ -59,6 +60,14 @@
 
         .btn-group a:hover {
             background: #c06e1f;
+        }
+
+        .btn-footer {
+            background: #2563eb;
+        }
+
+        .btn-footer:hover {
+            background: #1e40af;
         }
 
         /* ================= HERO ================= */
@@ -209,7 +218,7 @@
             margin-top: 8px;
         }
 
-        /* ================= FOOTER ================= */
+        /* ================= FOOTER================= */
         footer {
             background: #1f2937;
             color: #ccc;
@@ -217,6 +226,38 @@
             padding: 20px;
             margin-top: 60px;
             font-size: 14px;
+        }
+
+        .footer-extra {
+            max-width: 1100px;
+            margin: 0 auto 20px;
+            padding: 30px 20px;
+
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            text-align: left;
+        }
+
+        .footer-extra h4 {
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #ffffff;
+        }
+
+        .footer-extra p {
+            margin: 6px 0;
+            line-height: 1.6;
+            color: #d1d5db;
+        }
+
+        .footer-extra a {
+            color: #d1d5db;
+            text-decoration: none;
+        }
+
+        .footer-extra a:hover {
+            color: #ffffff;
         }
     </style>
 </head>
@@ -228,6 +269,7 @@
     <div class="btn-group">
         <a href="/admin/login">Login Admin</a>
         <a href="/penduduk/login">Login Penduduk</a>
+        <a href="#footer-target" class="btn-footer">Kontak Desa</a>
     </div>
 </div>
 
@@ -289,10 +331,45 @@
             @endif
         </div>
     @endforeach
+
+    {{-- ================= PAGINATION ================= --}}
+    <div style="margin-top: 30px; display: flex; justify-content: center;">
+        {{ $feedback->links() }}
+    </div>
+
 </div>
 
-{{-- ================= FOOTER ================= --}}
+<div id="footer-target"></div>
+
 <footer>
+    <div class="footer-extra">
+        <div>
+            <h4>Desa Bitungsari</h4>
+            <p>
+                Sistem Complaint & Feedback Desa Bitungsari merupakan media
+                resmi masyarakat untuk menyampaikan aspirasi dan pengaduan
+                demi pelayanan publik yang lebih baik.
+            </p>
+        </div>
+
+        <div>
+            <h4>Alamat Desa</h4>
+            <p>
+                Desa Bitungsari<br>
+                Kecamatan Ciawi<br>
+                Kabupaten Bogor<br>
+                Provinsi Jawa Barat
+            </p>
+        </div>
+
+        <div>
+            <h4>Kontak</h4>
+            <p>Email: <a href="mailto:desabitungsari@gmail.com">desabitungsari@gmail.com</a></p>
+            <p>Telepon: 08xx-xxxx-xxxx</p>
+            <p>Jam Layanan: 08.00 – 16.00 WIB</p>
+        </div>
+    </div>
+
     © {{ date('Y') }} Desa Bitungsari · Complaint & Feedback System
 </footer>
 

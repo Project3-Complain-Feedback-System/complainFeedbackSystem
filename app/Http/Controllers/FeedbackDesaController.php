@@ -62,4 +62,8 @@ class FeedbackDesaController extends Controller
     {
         //
     }
+    public function pagination()
+    {
+        return FeedbackDesa::latest()->simplePaginate(10);
+    }
 }

@@ -12,15 +12,12 @@ class Feedback extends Model
         'gambar',
         'penduduk_id',
         'kategori_id',
-        'status', // ✅ PENTING
+        'status',
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | RELATIONSHIPS
-    |--------------------------------------------------------------------------
-    */
 
+
+    //Relasi
     public function kategori()
     {
         return $this->belongsTo(Kategori::class, 'kategori_id');
@@ -31,7 +28,7 @@ class Feedback extends Model
         return $this->belongsTo(Penduduk::class, 'penduduk_id');
     }
 
-    public function isPending(): bool
+    /*public function isPending(): bool
     {
         return $this->status === 'pending';
     }
@@ -39,5 +36,5 @@ class Feedback extends Model
     public function isDone(): bool
     {
         return $this->status === 'done';
-    }
+    }*/
 }
