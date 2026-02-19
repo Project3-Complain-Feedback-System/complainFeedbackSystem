@@ -13,7 +13,6 @@ class LoginController extends Controller
     public function __invoke(Request $request)
     {
         try {
-            //code...
             $request->validate([
                 'nik' => 'required|numeric|min:16',
                 'tanggal_lahir' => 'required|date'

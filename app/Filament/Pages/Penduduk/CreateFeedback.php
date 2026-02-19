@@ -17,7 +17,8 @@ use Livewire\WithFileUploads;
 class CreateFeedback extends Page implements HasForms
 {
     use InteractsWithForms;
-    use WithFileUploads;
+
+
 
     protected static ?string $navigationIcon = 'heroicon-c-chat-bubble-left-ellipsis';
 

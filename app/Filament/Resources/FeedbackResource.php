@@ -46,6 +46,14 @@ class FeedbackResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) =>
+            $query->orderByRaw("CASE
+                WHEN status = 'pending' THEN 0
+                WHEN status = 'done' THEN 1
+                ELSE 2
+            END")
+            ->orderBy('created_at', 'desc')
+        )
             ->columns([
 
                 TextColumn::make('kategori.nama')->searchable(),

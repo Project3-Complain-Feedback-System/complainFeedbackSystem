@@ -13,6 +13,7 @@ use Filament\Forms\Components\ViewField;
 
 class LoginPenduduk extends Login
 {
+     protected static string $view = 'filament.auth.LoginPenduduk'; // View custom
     public $captchaValue; // nilai angka captcha saat ini
 
     public function mount(): void
