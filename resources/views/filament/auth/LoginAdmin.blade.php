@@ -4,7 +4,7 @@
         <form wire:submit.prevent="authenticate" class="space-y-4">
             {{ $this->form }}
 
-            {{-- 🔹 Tampilkan pesan error global (email/password/captcha) --}}
+            {{-- Tampilkan pesan error global (email/password/captcha) --}}
             @if ($errors->any())
                 <div class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md p-3 space-y-1">
                     @foreach ($errors->all() as $error)
