@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('komentar');
             $table->string('gambar')->nullable();
 
-            // ✅ STATUS COMPLAINT
+            // STATUS COMPLAINT
             $table->string('status')->default('pending');
             // pending = Belum Selesai
             // done    = Selesai

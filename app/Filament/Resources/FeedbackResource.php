@@ -48,7 +48,7 @@ class FeedbackResource extends Resource
         return $table
             ->columns([
 
-                TextColumn::make('kategori.nama'),
+                TextColumn::make('kategori.nama')->searchable(),
 
                 TextColumn::make('rating')
                     ->formatStateUsing(function (string $state): string {
@@ -70,7 +70,7 @@ class FeedbackResource extends Resource
 
                 ImageColumn::make('gambar'),
 
-                // ✅ KOLOM STATUS (PALING KANAN)
+                //KOLOM STATUS (PALING KANAN)
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
@@ -205,7 +205,7 @@ class FeedbackResource extends Resource
 
             TextEntry::make('komentar'),
 
-            // ✅ STATUS DI DETAIL VIEW
+            //STATUS DI DETAIL VIEW
             TextEntry::make('status')
                 ->label('Status')
                 ->badge()
