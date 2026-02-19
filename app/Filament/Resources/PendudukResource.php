@@ -49,6 +49,11 @@ class PendudukResource extends Resource
                     ->searchable(),
                 TextColumn::make('tanggal_lahir')
                     ->searchable(),
+                TextColumn::make('created_at')
+                    ->label('Waktu Upload')
+                    ->dateTime()
+                    ->searchable(),
+
 
             ])
             ->filters([
