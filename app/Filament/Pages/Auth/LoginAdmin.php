@@ -13,7 +13,7 @@ class LoginAdmin extends Login
 {
     protected static string $view = 'filament.auth.LoginAdmin'; // View custom
 
-    public $captchaValue;
+    public $captchaValue; // variabel untuk menyimpan nilai captcha saat ini
 
 
     public function mount(): void
@@ -22,9 +22,7 @@ class LoginAdmin extends Login
         $this->generateCaptcha();
     }
 
-    /**
-     * Generate captcha acak 4 digit
-     */
+    //membuat fungsi untuk generate captcha acak 4 digit
     public function generateCaptcha(): void
     {
         $this->captchaValue = collect(range(1, 4))
@@ -34,9 +32,7 @@ class LoginAdmin extends Login
         session(['captcha_admin' => $this->captchaValue]);
     }
 
-    /**
-     * Validasi login dan captcha
-     */
+  //validasi login dan captcha
     public function authenticate(): ?LoginResponse
     {
         $data = $this->form->getState();
@@ -68,9 +64,7 @@ class LoginAdmin extends Login
         return app(LoginResponse::class);
     }
 
-    /**
-     * Definisikan form login
-     */
+    //form login admin
     protected function getForms(): array
     {
         return [
