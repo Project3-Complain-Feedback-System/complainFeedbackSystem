@@ -37,6 +37,7 @@ class CreateFeedback extends Page implements HasForms
 
     public function form(Form $form): Form
     {
+        // form
         return $form
             ->schema([
                 Select::make('kategori_id')
@@ -70,12 +71,40 @@ class CreateFeedback extends Page implements HasForms
             ->statePath('data');
     }
 
+    //fun buat summit form
     public function submit(): void
     {
     $data = $this->form->getState();
     $validatedData = $this->form->getState();
 
     $user = auth('penduduk')->user();
+
+    //Simpan Data
+    $gambar = $validatedData['gambar'] ?? null;
+
+    if (is_array($gambar)) {
+        $gambar = reset($gambar);
+    }
+
+    if ($gambar instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
+        $gambar = $gambar->store('feedback', 'public');
+    }
+
+    Feedback::create([
+        'penduduk_id' => $user->id,
+        'kategori_id' => $validatedData['kategori_id'],
+        'rating'      => $validatedData['rating'],
+        'komentar'    => $validatedData['komentar'],
+        'gambar'      => $gambar,
+        'status'      => 'pending',
+    ]);
+
+    Notification::make()
+        ->title('Feedback berhasil dikirim!')
+        ->success()
+        ->send();
+
+    $this->form->fill();
 
     // Rate Limit
     $hourKey = 'feedback-hour-' . $user->id;
@@ -107,32 +136,7 @@ class CreateFeedback extends Page implements HasForms
     //Delay buatan (anti bot)
     sleep(2);
 
-    //Simpan Data
-    $gambar = $validatedData['gambar'] ?? null;
 
-    if (is_array($gambar)) {
-        $gambar = reset($gambar);
-    }
-
-    if ($gambar instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
-        $gambar = $gambar->store('feedback', 'public');
-    }
-
-    Feedback::create([
-        'penduduk_id' => $user->id,
-        'kategori_id' => $validatedData['kategori_id'],
-        'rating'      => $validatedData['rating'],
-        'komentar'    => $validatedData['komentar'],
-        'gambar'      => $gambar,
-        'status'      => 'pending',
-    ]);
-
-    Notification::make()
-        ->title('Feedback berhasil dikirim!')
-        ->success()
-        ->send();
-
-    $this->form->fill();
     }
 
 }
