@@ -33,38 +33,39 @@ class LoginPenduduk extends Login
     }
 
     public function authenticate(): ?LoginResponse
-    {
-        $data = $this->form->getState();
+{
+    $data = $this->form->getState();
+    $errors = [];
 
-        // Validasi captcha
-        if ($data['captcha'] != session('captcha_value')) {
-            $this->generateCaptcha(); // refresh captcha saat salah
-            throw ValidationException::withMessages([
-                'captcha' => 'Captcha salah, silakan coba lagi.',
-            ]);
-        }
-
-        //  Cek data penduduk
-        $penduduk = \App\Models\Penduduk::where('nik', $data['nik'])
-            ->where('tanggal_lahir', $data['tanggal_lahir'])
-            ->first();
-
-        if (! $penduduk) {
-            $this->generateCaptcha(); // refresh juga kalau login gagal
-            throw ValidationException::withMessages([
-                'nik' => 'NIK atau tanggal lahir salah.',
-            ]);
-        }
-
-        // Jika sukses login
-        Auth::guard('penduduk')->login($penduduk, true);
-
-        session()->forget('captcha_value');
-        session()->regenerate();
-
-        // sesuai return type parent
-        return app(LoginResponse::class);
+    // Validasi captcha
+    if (($data['captcha'] ?? null) !== session('captcha_value')) {
+        $errors['captcha'] = 'Captcha salah, silakan coba lagi.';
     }
+
+    // Cek data penduduk
+    $penduduk = \App\Models\Penduduk::where('nik', $data['nik'])
+        ->where('tanggal_lahir', $data['tanggal_lahir'])
+        ->first();
+
+    if (! $penduduk) {
+        $errors['nik'] = 'NIK atau tanggal lahir salah.';
+    }
+
+    // Jika ada error (captcha atau login)
+    if (!empty($errors)) {
+        $this->generateCaptcha();
+
+        throw ValidationException::withMessages($errors);
+    }
+
+    // Jika login berhasil
+    Auth::guard('penduduk')->login($penduduk, true);
+
+    session()->forget('captcha_value');
+    session()->regenerate();
+
+    return app(LoginResponse::class);
+}
 
     protected function getForms(): array
     {

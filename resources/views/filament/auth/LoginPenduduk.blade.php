@@ -1,5 +1,6 @@
 <x-filament-panels::page.simple>
     <div class="w-full max-w-md mx-auto space-y-6">
+
         {{-- Form Login --}}
         <form wire:submit.prevent="authenticate" class="space-y-4">
             {{ $this->form }}
@@ -7,7 +8,7 @@
             {{-- Tampilkan pesan error global --}}
             @if ($errors->any())
                 <div class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md p-3 space-y-1">
-                    @foreach ($errors->unique() as $error)
+                    @foreach ($errors->all() as $error)
                         <div>{{ $error }}</div>
                     @endforeach
                 </div>

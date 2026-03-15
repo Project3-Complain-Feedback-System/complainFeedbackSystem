@@ -47,7 +47,8 @@ class LoginAdmin extends Login
         try {
             parent::authenticate();
         } catch (ValidationException $e) {
-        $errors['email'||'password'] = 'Email atau password salah.';
+            $errors['email'] = 'Email atau password salah.';
+            $errors['password'] = 'Email atau password salah.';
         }
 
         // Jika ada error (captcha atau login), tampilkan semua sekaligus
