@@ -43,7 +43,7 @@ class LoginAdmin extends Login
             $errors['captcha'] = 'Captcha salah, silakan coba lagi.';
         }
 
-        // Tetap coba autentikasi meskipun captcha salah
+        // cek email dan password
         try {
             parent::authenticate();
         } catch (ValidationException $e) {
