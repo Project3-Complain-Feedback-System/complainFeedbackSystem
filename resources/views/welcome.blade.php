@@ -333,8 +333,59 @@
     @endforeach
 
     {{-- ================= PAGINATION ================= --}}
-    <div style="margin-top: 30px; display: flex; justify-content: center;">
-        {{ $feedback->links() }}
+        <div style="margin-top: 30px; display: flex; justify-content: center;">
+        @if ($feedback->hasPages())
+        <nav style="display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; margin: 20px 0;">
+
+            {{-- Previous --}}
+            @if ($feedback->onFirstPage())
+                <span style="padding: 6px 12px; border-radius: 6px; background: #e5e7eb; color: #9ca3af; cursor: not-allowed; font-size: 14px;">&laquo; Previous</span>
+            @else
+                <a href="{{ $feedback->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #1877f2; color: white; font-size: 14px; text-decoration: none;">&laquo; Previous</a>
+            @endif
+
+            {{-- Nomor Halaman --}}
+            @php
+                $current = $feedback->currentPage();
+                $last = $feedback->lastPage();
+                $start = max(1, $current - 2);
+                $end = min($last, $current + 2);
+            @endphp
+
+            {{-- Halaman pertama + titik-titik --}}
+            @if ($start > 1)
+                <a href="{{ $feedback->url(1) }}" style="padding: 6px 12px; border-radius: 6px; background: #f3f4f6; color: #374151; font-size: 14px; text-decoration: none;">1</a>
+                @if ($start > 2)
+                    <span style="padding: 6px 6px; font-size: 14px; color: #6b7280;">...</span>
+                @endif
+            @endif
+
+            {{-- Nomor halaman tengah --}}
+            @for ($page = $start; $page <= $end; $page++)
+                @if ($page == $current)
+                    <span style="padding: 6px 12px; border-radius: 6px; background: #d6812a; color: white; font-weight: bold; font-size: 14px;">{{ $page }}</span>
+                @else
+                    <a href="{{ $feedback->url($page) }}" style="padding: 6px 12px; border-radius: 6px; background: #f3f4f6; color: #374151; font-size: 14px; text-decoration: none;">{{ $page }}</a>
+                @endif
+            @endfor
+
+            {{-- Titik-titik + halaman terakhir --}}
+            @if ($end < $last)
+                @if ($end < $last - 1)
+                    <span style="padding: 6px 6px; font-size: 14px; color: #6b7280;">...</span>
+                @endif
+                <a href="{{ $feedback->url($last) }}" style="padding: 6px 12px; border-radius: 6px; background: #f3f4f6; color: #374151; font-size: 14px; text-decoration: none;">{{ $last }}</a>
+            @endif
+
+            {{-- Next --}}
+            @if ($feedback->hasMorePages())
+                <a href="{{ $feedback->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #1877f2; color: white; font-size: 14px; text-decoration: none;">Next &raquo;</a>
+            @else
+                <span style="padding: 6px 12px; border-radius: 6px; background: #e5e7eb; color: #9ca3af; cursor: not-allowed; font-size: 14px;">Next &raquo;</span>
+            @endif
+
+        </nav>
+        @endif
     </div>
 
 </div>
