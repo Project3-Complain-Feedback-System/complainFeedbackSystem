@@ -37,7 +37,9 @@ class FeedbackDesaResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('keterangan')
-                ->searchable(),
+                ->searchable()
+                ->limit(50)// Memotong pada 50 karakter
+                ->wrap(),// Membungkus teks yang ditampilkan
                 ImageColumn::make('gambar')
                 ->searchable()
                 ->sortable(),

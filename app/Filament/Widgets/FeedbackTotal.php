@@ -10,9 +10,9 @@ class FeedbackTotal extends BaseWidget
 {
     protected function getStats(): array
     {
-        $positif = Feedback::where('rating', '>', 3)->count();
-        $negatif = Feedback::where('rating', '<', 3)->count();
-        $netral = Feedback::where('rating', '=', 3)->count();
+        $positif = Feedback::where('rating', '>', 3, 'and')->count();
+        $negatif = Feedback::where('rating', '<', 3, 'and')->count();
+        $netral = Feedback::where('rating', '=', 3, 'and')->count();
         return [
             Stat::make('Feedback positif', "$positif orang")
                 ->description("Sebanyak {$positif} orang memberikan komentar positif")

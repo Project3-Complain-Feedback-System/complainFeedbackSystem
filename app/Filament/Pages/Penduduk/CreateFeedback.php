@@ -65,19 +65,44 @@ class CreateFeedback extends Page implements HasForms
                 FileUpload::make('gambar')
                     ->label('Lampiran Gambar (opsional)')
                     ->image()
-                    ->directory('feedback')
-                    ->maxSize(2048),
+                    ->maxSize(20048)
+                    ->directory('feedback'),
             ])
             ->statePath('data');
     }
 
     //fun buat summit form
-    public function submit(): void
-    {
-    $data = $this->form->getState();
-    $validatedData = $this->form->getState();
+    public function submit(): void {
 
     $user = auth('penduduk')->user();
+    // Rate Limit
+    $hourKey = 'feedback-hour-' . $user->id;
+    $dayKey  = 'feedback-day-' . $user->id;
+
+    // Max 3 feedback per JAM
+    if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($hourKey, 3)) {
+        Notification::make()
+            ->title('Terlalu sering mengirim feedback')
+            ->body('Maksimal 3 feedback dalam 1 jam.')
+            ->danger()
+            ->send();
+        return;
+    }
+
+    //Max 10 feedback per HARI
+    if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($dayKey, 10)) {
+        Notification::make()
+            ->title('Batas harian tercapai')
+            ->body('Maksimal 10 feedback per hari.')
+            ->danger()
+            ->send();
+        return;
+    }
+    //$data = $this->form->getState();
+    //ambil data form
+    $validatedData = $this->form->getState();
+
+    //$user = auth('penduduk')->user();
 
     //Simpan Data
     $gambar = $validatedData['gambar'] ?? null;
@@ -106,29 +131,7 @@ class CreateFeedback extends Page implements HasForms
 
     $this->form->fill();
 
-    // Rate Limit
-    $hourKey = 'feedback-hour-' . $user->id;
-    $dayKey  = 'feedback-day-' . $user->id;
 
-    // Max 3 feedback per JAM
-    if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($hourKey, 3)) {
-        Notification::make()
-            ->title('Terlalu sering mengirim feedback')
-            ->body('Maksimal 3 feedback dalam 1 jam.')
-            ->danger()
-            ->send();
-        return;
-    }
-
-    //Max 10 feedback per HARI
-    if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($dayKey, 10)) {
-        Notification::make()
-            ->title('Batas harian tercapai')
-            ->body('Maksimal 10 feedback per hari.')
-            ->danger()
-            ->send();
-        return;
-    }
 
     \Illuminate\Support\Facades\RateLimiter::hit($hourKey, 3600);
     \Illuminate\Support\Facades\RateLimiter::hit($dayKey, 86400);

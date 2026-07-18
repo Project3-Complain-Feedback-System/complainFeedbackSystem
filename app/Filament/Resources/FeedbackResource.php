@@ -74,7 +74,10 @@ class FeedbackResource extends Resource
                     })
                     ->sortable(),
 
-                TextColumn::make('komentar')->searchable(),
+                TextColumn::make('komentar')
+                ->searchable()
+                ->limit(20) // Memotong pada 20 karakter
+                ->wrap(),   // Membungkus teks yang ditampilkan
 
                 ImageColumn::make('gambar'),
 

@@ -23,11 +23,11 @@
         </form>
 
         {{-- Tombol Login Admin --}}
-        <div class="text-center">
+        {{--<div class="text-center">
             <a href="{{ url('/admin/login') }}"
                class="block w-full border border-emerald-600 text-emerald-600 hover:bg-emerald-50 font-semibold rounded-md py-2 transition">
                 Login Admin
             </a>
-        </div>
+        </div> --}}
     </div>
 </x-filament-panels::page.simple>

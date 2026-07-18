@@ -7,6 +7,6 @@ Route::get('/', function () {
     //$feedback = FeedbackDesa::latest()->get();
 
     //untuk pagination di welcome.balde.php
-    $feedback = FeedbackDesa::latest()->paginate(10);
+    $feedback = FeedbackDesa::latest("created_at")->paginate(10);
     return view('welcome', ['feedback' => $feedback]);
 });
